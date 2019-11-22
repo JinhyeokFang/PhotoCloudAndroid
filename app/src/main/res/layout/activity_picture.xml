@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:background="#000000">
+
+    <ImageView
+            android:id="@+id/FullImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:id="@+id/toolbar"/>
+            android:layout_height="@dimen/app_bar_height"
+            app:title="사진 보기"
+            app:titleTextColor="#ffffff"
+            android:id="@+id/toolbar"
+            android:layout_gravity="top"/>
 
-    <ja.burhanrashid52.photoeditor.PhotoEditorView
-            android:id="@+id/FullImageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

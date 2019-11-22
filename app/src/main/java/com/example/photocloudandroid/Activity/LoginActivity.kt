@@ -1,5 +1,6 @@
 package com.example.photocloudandroid.Activity
 
+import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.app.ActivityCompat
 import com.example.photocloudandroid.R
 import com.example.photocloudandroid.Utils.Utils
 import kotlinx.android.synthetic.main.activity_login.*
@@ -21,6 +25,15 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        val PERMISSIONS = arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, 1)
+        }
 
         loginButton.setOnClickListener { run {
             RetrofitClient.INSTANCE.getRetrofitService().login("test01","test01").enqueue(object: Callback<ResponseBody> {
@@ -50,5 +63,16 @@ class LoginActivity : AppCompatActivity() {
                 }
             })
         } }
+    }
+
+    fun hasPermissions(context: Context?, permissions: Array<String>): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null) {
+            for (permission in permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) !== PackageManager.PERMISSION_GRANTED) {
+                    return false
+                }
+            }
+        }
+        return true
     }
 }

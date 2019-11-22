@@ -1,34 +1,34 @@
 package com.example.photocloudandroid.Activity
 
-import android.content.Context
-import android.content.ContextWrapper
+import android.R.attr.bitmap
 import android.database.MergeCursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_picture.*
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.photocloudandroid.R
 import com.example.photocloudandroid.Utils.Utils
 import com.example.photocloudandroid.WebClient.RetrofitClient
-import ja.burhanrashid52.photoeditor.PhotoEditor
-import okhttp3.*
+import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.activity_picture.*
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
-import java.lang.Exception
+
 
 class PictureActivity : AppCompatActivity() {
     internal var removeImagesTask: RemoveImages = RemoveImages()
@@ -37,10 +37,6 @@ class PictureActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picture)
 
-        val FullImageVIew: PhotoEditor = PhotoEditor.Builder(this, FullImageView)
-         .setPinchTextScalable(true)
-         .build()
-
         Glide.with(applicationContext).load(intent.getStringExtra("url")).asBitmap().listener(object:
             RequestListener<String, Bitmap> {
             override fun onException(e: Exception?, model: String?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
@@ -48,13 +44,21 @@ class PictureActivity : AppCompatActivity() {
             }
 
             override fun onResourceReady(resource: Bitmap?, model: String?, target: Target<Bitmap>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
-                Log.d("asdf", resource.toString())
+                val tempFile = File(filesDir, "temp.jpg")
+                try {
+                    tempFile.createNewFile()
+                    val out = FileOutputStream(tempFile)
+                    resource!!.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                    out.close()
+                    UCrop.of(Uri.parse("file://" + tempFile.path), Uri.parse(tempFile.absolutePath))
+                        .withAspectRatio(16.0f, 9.0f)
+                        .start(this@PictureActivity)
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
                 return false
             }
-        })
-        FullImageView.source.setImageResource(R.mipmap.icon)
-        Log.d("asdf", "asdf")
-        toolbar.setTitle("사진 편집")
+        }).into(FullImageView)
         setSupportActionBar(toolbar)
     }
 
