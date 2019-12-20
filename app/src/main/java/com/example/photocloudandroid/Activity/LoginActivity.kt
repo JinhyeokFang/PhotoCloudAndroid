@@ -63,6 +63,34 @@ class LoginActivity : AppCompatActivity() {
                 }
             })
         } }
+        registerButton.setOnClickListener { run {
+            RetrofitClient.INSTANCE.getRetrofitService().register(idtv.text.toString(),passwordtv.text.toString()).enqueue(object: Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    when (response.code()) {
+                        200 -> {
+                            val intent = Intent(applicationContext, MainActivity::class.java)
+                            overridePendingTransition(R.anim.`in`, R.anim.out)
+                            val bodyString: String = response.body()!!.string().toString()
+                            val body: JSONObject = JSONObject(bodyString).getJSONObject("body")
+                            Utils.setSavedToken(applicationContext, body.getString("token"))
+                            startActivity(intent)
+                            finish()
+                        }
+                        403 -> {
+                            Toast.makeText(applicationContext, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        500 -> {
+                            Toast.makeText(applicationContext, "서버 오류로 인해 회원가입하실 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(applicationContext, "회원가입할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("LoginActivity", t.message)
+                }
+            })
+        } }
     }
 
     fun hasPermissions(context: Context?, permissions: Array<String>): Boolean {

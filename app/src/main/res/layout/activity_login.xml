@@ -27,11 +27,24 @@
             android:background="#ffffff"
             android:text="login"
             android:textColor="#36afff"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
+
+    <Button
+            android:id="@+id/registerButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#ffffff"
+            android:text="register"
+            android:textColor="#36afff"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/id"
@@ -65,6 +78,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordtv"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
