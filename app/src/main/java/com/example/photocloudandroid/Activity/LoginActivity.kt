@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginButton.setOnClickListener { run {
-            RetrofitClient.INSTANCE.getRetrofitService().login("test01","test01").enqueue(object: Callback<ResponseBody> {
+            RetrofitClient.INSTANCE.getRetrofitService().login(idtv.text.toString(),passwordtv.text.toString()).enqueue(object: Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     when (response.code()) {
                         200 -> {

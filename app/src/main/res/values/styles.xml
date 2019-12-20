@@ -8,4 +8,11 @@
         <item name="colorAccent">#037999</item>
     </style>
 
+    <style name="EditModeTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#ff3333</item>
+        <item name="colorPrimaryDark">#ff1a1a</item>
+        <item name="colorAccent">#037999</item>
+    </style>
+
 </resources>

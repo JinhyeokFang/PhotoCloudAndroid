@@ -24,6 +24,7 @@
             android:background="#36afff"
             app:title="Photo Cloud"
             app:titleTextColor="#ffffff"
+            android:id="@+id/toolbar"
             android:layout_gravity="top"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -5,11 +5,14 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.MergeCursor
+import android.graphics.Color
 import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                     val imageJSON = imageJSONArray.getJSONObject(i)
                     imageList.add(Image("http://spear-server.run.goorm.io/" + imageJSON.getString("url"), imageJSON.getString("date")))
                 }
+                imageList.reverse()
                 val adapter = ImagesAdapter(this@MainActivity, imageList)
                 gridView.layoutManager = GridLayoutManager(applicationContext,2)
                 gridView.adapter = adapter
@@ -73,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                         val imageJSON = imageJSONArray.getJSONObject(i)
                         imageList.add(Image("http://spear-server.run.goorm.io/" + imageJSON.getString("url"), imageJSON.getString("date")))
                     }
+                    imageList.reverse()
                     val adapter = ImagesAdapter(this@MainActivity, imageList)
                     gridView.adapter = adapter
                     swipe.isRefreshing = false
@@ -130,10 +135,11 @@ class MainActivity : AppCompatActivity() {
                 val token = RequestBody.create(MediaType.parse("multipart/form-data"), savedToken);
 
                 RetrofitClient.INSTANCE.getRetrofitService().uploadImage(body, date, token).enqueue(object: Callback<ResponseBody> {
-                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {}
+                    override fun onResponse(call    : Call<ResponseBody>, response: Response<ResponseBody>) {}
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                 })
             }
+
             cursor.close()
 
             return xml
@@ -155,8 +161,6 @@ class MainActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {}
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
             })
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            val cropError = UCrop.getError(data!!)
         }
     }
 }
